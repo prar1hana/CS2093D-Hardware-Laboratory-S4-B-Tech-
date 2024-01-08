@@ -1,0 +1,376 @@
+Verilog program to implement the following logic designs using behavioral modeling:
+
+    a) D flip-flop with asynchronous preset and clear
+
+///////TOP MODULE///////
+module DFFpc(input PRE,CLR,D,Clk,
+				output reg Q,Qbar);
+	always@(posedge Clk or posedge CLR or posedge PRE)
+	begin
+	if(PRE==1)
+		begin
+		if(CLR==1)
+			begin
+			Q<=1'bx;
+			Qbar<=1'bx;
+			end
+		else
+			begin
+			Q<=1;
+			Qbar<=0;
+			end
+		end
+	else if(CLR==1)
+		begin
+		Q<=1'b0;
+		Qbar<=1'b1;
+		end
+	else
+		begin
+		Q<=D;
+		Qbar<=!D;
+		end
+	end
+endmodule
+
+////TESTBENCH////
+
+module tb();
+	reg Clk,PRE,CLR,D;
+	wire Q,Qbar;
+	
+	DFFpc g1(PRE,CLR,D,Clk,Q,Qbar);
+	
+	initial
+	begin
+		Clk=0;
+		forever
+			#5 Clk=!Clk;
+	end
+	
+	initial
+	begin
+		D=0;
+		PRE=0;
+		CLR=0;
+		
+		#10 D=1;
+		#10 D=0;
+		#10 PRE=1;
+		#10 CLR=1;
+		#10 PRE=0;
+		#10 CLR=0;
+		#10 D=1;
+		#10 PRE=1;
+		#10 CLR=1;
+		#10 PRE=0;
+		#10 CLR=0;
+		#10;
+		$stop;
+	end
+endmodule
+
+
+
+
+    b) Clocked D latch (Level triggering) with asynchronous preset and clear
+//////TOP MODULE//////
+module DFFlevel(input PRE,CLR,D,Clk,
+				output reg Q,Qbar);
+				
+	always@(Clk or CLR or PRE)
+	begin
+	if(PRE==1)
+		begin
+		if(CLR==1)
+			begin
+			Q<=1'bx;
+			Qbar<=1'bx;
+			end
+		else
+			begin
+			Q<=1;
+			Qbar<=0;
+			end
+		end
+	else if(CLR==1)
+		begin
+		Q<=1'b0;
+		Qbar<=1'b1;
+		end
+	else if(Clk==1)
+		begin
+		Q<=D;
+		Qbar<=!D;
+		end
+	end
+endmodule
+
+////////TEST BENCH////////
+module tb();
+
+	//inputs
+	reg Clk,CLR,PRE,D;
+	//outputs
+	wire Q,Qbar;
+	
+	//Instantiation
+	DFFlevel jhj(PRE,CLR,D,Clk,Q,Qbar);
+	
+	//Clock generation
+	initial
+	begin
+		Clk=0;
+		forever
+		begin
+			#5 Clk=~Clk;
+		end
+	end
+	
+	//Test Vectors
+	initial
+	begin
+		PRE=0;
+		CLR=0;
+		D=0;
+		#10 D=1;
+		#10 D=0;
+		#10 PRE=1;
+		#10 D=1;
+		#10 D=0;
+		#10 PRE=1;
+		#10 CLR=1;
+		#10 PRE=0;
+		#10 CLR=0;
+		#10 D=1;
+		#10 PRE=1;
+		#10 CLR=1;
+		#10 PRE=0;
+		#10 CLR=0;
+		#10;
+		$stop;
+	end
+endmodule
+	
+
+    c) 8-bit Shift Register
+
+////////TOP MODULE///////
+//Right Sift register SIPO
+module Shift_reg8(input in_data,reset,Clk,
+					   output reg [7:0] data);
+	
+	always@(posedge Clk or posedge reset)
+	begin
+	
+		if(reset==1)
+		begin
+			data<=8'b00000000;
+		end
+		
+		else
+		begin
+			data<={in_data,data[7:1]};
+		end
+		
+	end
+	
+endmodule
+
+///////////TEST BENCH//////////
+
+module tb();
+	
+	//Inputs
+	reg in_data,reset,Clk;
+	
+	//Outputs
+	wire [7:0] data;
+	
+	//Instantiation
+	Shift_reg8 gq(in_data,reset,Clk, data);
+	
+	initial
+	begin
+		Clk=0;
+		forever
+		begin
+			#5 Clk=~Clk;
+		end
+	end
+	
+	initial
+	begin
+		in_data=0;
+		#10;
+		reset=0;
+		#10 in_data=1;
+		#10 in_data=0;
+		#10 in_data=1;
+		#10 in_data=1;
+		#10 reset=1;
+		#10 in_data=1;
+		#10 reset=0;
+		#10 in_data=0;
+		#10 in_data=1;
+		#10 in_data=1;
+		#10 in_data=1;
+		#10 in_data=1;
+		#10 in_data=0;
+		#10 in_data=1;
+		#10 in_data=1;
+		#10;
+		$stop;
+	end
+endmodule
+
+
+    d) 8-bit Register
+
+//////////TOP MODULE/////////
+//Parallel in parallel out
+//Load is synchrocnous set
+module Reg_8bit(data_in,load,reset,Clk,stored);
+
+	//inputs and outputs
+	input [7:0] data_in;
+	input load,reset;
+	input Clk;
+	output reg [7:0] stored;
+	
+	//Function
+	always@(posedge Clk or posedge reset)
+	begin
+		
+		if(reset==1)
+		begin
+			stored<=8'd0;
+		end
+	
+		else if(load==1)
+		begin
+			stored<=data_in;
+		end
+		
+	end
+	
+endmodule
+
+///////////TEST BENCH////////////////
+module tb();
+	
+	//input
+	reg Clk,reset,load;
+	reg [7:0] data_in;
+	
+	//output
+	wire  [7:0]data;
+	
+	//module instantantion
+	Reg_8bit ggj(data_in,load,reset,Clk,data);
+	
+	//Clock
+	initial
+	begin
+		Clk=0;
+		forever
+		begin
+			# 5 Clk=~Clk;
+data		end
+	end
+	
+	//Test vectors
+	initial
+	begin
+		reset=0;
+		load=0;
+		#10 data_in=8'b11010011;
+		#10 load=1;
+		#10 reset=1;
+		#10 reset=0;
+		#10 data_in=8'b10101010;
+		#10 load=0;
+		#10 data_in=8'b11111110;
+		#10;
+		$finish;
+	end
+endmodule
+
+    e) Multiplier (4×4) using full adders
+
+/////////////////TOP MODULE//////////////
+
+module Multiplier(A,B,Ans);
+	
+	input [3:0] A,B;
+	output [7:0] Ans;
+	
+	reg [6:0]X,Y,Z,W;
+	wire [6:0]temp1,temp2;
+	wire [2:0]c;
+	
+	always@*
+	begin
+		if(B[0]==1)
+		begin
+			X={3'd0,A};
+		end
+		else X=7'd0;
+		if(B[1]==1)
+		begin
+			Y={3'd0,A}<<1;
+		end
+		else Y=7'd0;
+		if(B[2]==1)
+		begin
+			Z={3'd0,A}<<2;
+		end
+		else Z=7'd0;
+		if(B[3]==1)
+		begin
+			W={3'd0,A}<<3;
+		end
+		else W=7'd0;
+	end
+	FullAdder FA0(X,Y,temp1,c[0]);
+	FullAdder FA1(temp1,Z,temp2,c[1]);
+	FullAdder FA2(temp2,W,Ans[6:0],Ans[7]);
+	
+endmodule
+
+//7 bit full adder
+module FullAdder(A,B,Sum,carry);
+	input [6:0] A,B;
+	output reg [6:0]Sum;
+	output reg carry;
+	
+	always@*
+	begin
+	{carry,Sum}=A+B;
+	end
+	
+endmodule
+
+
+//////////////TEST BENCH///////////
+module tb();
+
+	//input
+	reg [3:0] A,B;
+	//output
+	wire [7:0] Ans;
+	
+	//Instantiation
+	Multiplier gate2(A,B,Ans);
+	
+	//Test Vectors
+	initial
+	begin
+	A=4'd4; B=4'd3; #50;
+	A=4'd15; B=4'd1; #50;
+	A=4'd0;B=4'd11;#50;
+	A=4'd10;B=4'd11;#50;
+	A=4'd14;B=4'd9;#50;
+	end
+	
+endmodule
