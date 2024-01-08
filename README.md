@@ -4,7 +4,7 @@ This assignment focuses on implementing various hardware components using Verilo
 
 Design and implement the following logic functions using Verilog with behavioral modeling: Subsequently, simulate and verify all the given logic functions using ModelSim integrated with Intel Quartus software. You are supposed to write the test bench with all the cases for every design.
 
-An 8-bit adder with sum and carry as output.
-An 8-bit subtractor with a difference and borrow as output.
-An 8-bit ALU that can perform addition, subtraction, bitwise XOR, and left shift operations.
-8-bit D latch with enable an active low reset
+1. An 8-bit adder with sum and carry as output.
+2. An 8-bit subtractor with a difference and borrow as output.
+3. An 8-bit ALU that can perform addition, subtraction, bitwise XOR, and left shift operations.
+4. 8-bit D latch with enable an active low reset.
