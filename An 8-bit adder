@@ -1,0 +1,16 @@
+module eightbitadder
+  (
+      input [7:0]x,
+			input [7:0]y,
+			input cin,
+			output reg c, 
+			output reg[7:0]s
+  );
+
+		 always@(x or y or cin)
+     begin
+  		 {c,s}=x+y+cin;
+		 end
+
+endmodule
+		
