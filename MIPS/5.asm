@@ -1,3 +1,4 @@
+#Determine if a given integer is a perfect number. A perfect number is a positive integer that is equal to the sum of its proper divisors, excluding itself. For example, 6 is a perfect number because the sum of its proper divisors (1, 2, and 3) equals 6.
     .data
 prompt: .asciiz "Enter an integer: "
 result: .asciiz " is a perfect number.\n"
