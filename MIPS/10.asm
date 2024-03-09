@@ -1,4 +1,5 @@
-    .data
+#10. Perform an addition operation on two numbers, A and B. Where A is a signed number and B is the 2's complement of A.
+.data
 A_prompt: .asciiz "Enter the value of A (in binary): "
 B_label:  .asciiz "The 2's complement of A (B) is: "
 result_label: .asciiz "The result of A + B is: "
