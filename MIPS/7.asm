@@ -1,3 +1,4 @@
+#7. Find the number of prime numbers and print them in a given range.
 .data
 prompt: .asciiz "Enter the upper bound of the range: "
 lower_bound_prompt: .asciiz "Enter the lower bound: "
