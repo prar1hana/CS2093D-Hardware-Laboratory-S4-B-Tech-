@@ -1,11 +1,9 @@
 .data
 prompt: .asciiz "Enter the upper bound of the range: "
-newline: .asciiz "\n"
-.lower_bound_prompt: .asciiz "Enter the lower bound: "
+lower_bound_prompt: .asciiz "Enter the lower bound: "
 result: .asciiz "The prime numbers in the range are: "
-fullstop: .asciiz "."
-comma: .asciiz ", "
 count_msg: .asciiz "\nThe total number of prime numbers found: "
+space: .asciiz " "
 
 .text
 .globl main
@@ -21,14 +19,9 @@ main:
     syscall
     move $s0, $v0  # $s0 = input number (upper bound)
     
-    # Print newline
-    li $v0, 4
-    la $a0, newline
-    syscall
-
     # Read lower bound
     li $v0, 4
-    la $a0, .lower_bound_prompt
+    la $a0, lower_bound_prompt
     syscall
     
     # Read user input (lower bound)
@@ -41,11 +34,6 @@ main:
     la $a0, result
     syscall
 
-    # Print newline
-    li $v0, 4
-    la $a0, newline
-    syscall
-    
     # Initialize counter for prime numbers
     li $s6, 0
     
@@ -73,38 +61,17 @@ print_prime:
     move $a0, $s2
     syscall
     
+    # Print space
+    li $v0, 4
+    la $a0, space
+    syscall
+    
     # Increment counter for prime numbers
     addi $s6, $s6, 1
-    
-    # Check if it's the last prime number
-    beq $s2, $s0, last_prime
-    
-    # Print comma
-    li $v0, 4
-    la $a0, comma
-    syscall
     
     # Increment $s2 and repeat loop
     addi $s2, $s2, 1
     j loop
-
-last_prime:
-    # Print full stop
-    li $v0, 4
-    la $a0, fullstop
-    syscall
-    
-    # Print newline
-    li $v0, 4
-    la $a0, newline
-    syscall
-    
-    # Increment counter for prime numbers
-    addi $s6, $s6, 1
-    
-    # Exit program
-    li $v0, 10
-    syscall
 
 end_loop:
     # Print the total number of prime numbers found
