@@ -24,7 +24,7 @@ main:
     
     # Allocate memory for the array
     sll $s2, $s1, 2 # $s2 = array size * 4
-    li $v0, 9       # Allocate memory
+    li $v0, 9       # Allocates memory of size a0 and returns base address to v0
     move $a0, $s2   # $a0 = memory size
     syscall
     move $s0, $v0   # $s0 = base address of the array
