@@ -3,7 +3,7 @@
 prompt_array_size:  .asciiz "Enter the size of the array: "
 prompt_array_element: .asciiz "Enter element "
 prompt_key:         .asciiz "Enter the key to search for: "
-found_message:      .asciiz "least index at ehich the key is found "
+found_message:      .asciiz "least index at which the key is found "
 not_found_message:  .asciiz "Key not found in the array"
 newline:            .asciiz "\n"
 base_address:       .word 0  # Memory location to store the base address
@@ -23,9 +23,8 @@ main:
     move $s1, $v0  # $s1 = array size
     
     # Allocate memory for the array
-    sll $s2, $s1, 2 # $s2 = array size * 4
+    sll $a0, $s1, 2 # $s2 = array size * 4
     li $v0, 9       # Allocates memory of size a0 and returns base address to v0
-    move $a0, $s2   # $a0 = memory size
     syscall
     move $s0, $v0   # $s0 = base address of the array
     sw $s0, base_address  # Store the base address in memory
