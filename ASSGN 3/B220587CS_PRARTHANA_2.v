@@ -4,7 +4,32 @@ b.  	It should have one read port (read_port_1) and two write port (write_port_1
 c.   	Only one operation, either read or write, can be performed at a time on the register. However, write operations can be performed from write ports alternatively, i.e., if a previous write is done using write_port_1, then the next write will be done using write_port_2, and vice versa.
 d.  	Each read port should be able to access data from the register without any conflicts with write operations.
 Please note that you should define the module with appropriate input and output ports and ensure that it meets all the specified requirements above.
-    
+    module custom_register (
+        input [15:0] write_port_1,
+        input [15:0] write_port_2,
+        input write_enable,
+        input read_enable,
+        output reg [15:0] read_port
+    );
+
+        reg [15:0] register_data=0;
+        reg toggle_write_port=1;
+
+        always @ (posedge read_enable) begin
+            read_port <= register_data;
+        end
+        always @ (posedge write_enable) begin
+            read_port <=0;
+            if (toggle_write_port==1) begin
+                register_data <= write_port_1
+            end
+            else if (toggle_write_port==-1) begin
+                register_data <= write_port_1  
+            end
+            toggle_write_port <= -1*toggle_write_port;  
+        end
+endmodule
+
    module Q2(
     input [15:0] write_address_1, //input writing into 1
     input [15:0] write_address_2, // input writing into 2
