@@ -1,33 +1,45 @@
-3.    Design and implement a register in Verilog for a custom processor's architecture with the following specifications:
+// 3.    Design and implement a register in Verilog for a custom processor's architecture with the following specifications:
 
-a.       It should be parameterized to support different data widths ranging from 8 bits to 32 bits.
+// a.       It should be parameterized to support different data widths ranging from 8 bits to 32 bits.
 
-b.      It should have one read port (read_port_1) and one write port (write_port_1).
+// b.      It should have one read port (read_port_1) and one write port (write_port_1).
 
-c.       Both operations, read or write, are allowed at a time on the register.
+// c.       Both operations, read or write, are allowed at a time on the register.
 
-d.      If both operations are performed on the register, then the write operation has more priority over read operation.
+// d.      If both operations are performed on the register, then the write operation has more priority over read operation.
 
-Please note that you should define the module with appropriate input and output ports and ensure that it meets all the specified requirements above.
+// Please note that you should define the module with appropriate input and output ports and ensure that it meets all the specified requirements above.
 
 
-module Q3 #(parameter DATA_WIDTH = 8) (
+module custom_register
+#(
+    parameter DATA_WIDTH = 8 // Default data width is 8 bits
+)
+(
     input wire clk,
     input wire reset,
-    input wire read_enable,
-    input wire write_enable,
-    input wire [DATA_WIDTH-1:0] write_port_1,
-    output wire [DATA_WIDTH-1:0] read_port_1
+    input wire read_en,
+    input wire write_en,
+    input wire [DATA_WIDTH-1:0] data_in,
+    output reg [DATA_WIDTH-1:0] data_out
 );
-    reg [DATA_WIDTH-1:0] reg_data;
 
-    always @(posedge clk or posedge reset) begin
-        if (reset)
-            reg_data <= 0;
-        else if (write_enable) //if write is enabled
-            reg_data <= write_port_1; 
+reg [DATA_WIDTH-1:0] register_data = 0; // Initialize register_data to 0
+
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
+        register_data <= 0;
+    end else begin
+        if (write_en) begin
+            register_data <= data_in;
+        end
     end
-
-    assign read_port_1 = read_enable ? reg_data : 0; //if read is enabled
+    
+    if (read_en) begin
+        data_out <= register_data;
+    end else begin
+        data_out <= 'bz; // Tri-state output if read is not enabled
+    end
+end
 
 endmodule
