@@ -24,8 +24,12 @@ module custom_register (
             toggle_write_port <= 1;    // Reset the toggle for write ports
         end
         else begin
+            // read operation
+             if (read_enable)begin
+                read_port <= register_data;
+             end
             // Write operation
-            if (write_enable) begin
+            else if (write_enable) begin
                 if (toggle_write_port == 1)
                     register_data <= write_port_1;
                 else
@@ -37,8 +41,7 @@ module custom_register (
 
     // Asynchronous read
     always @* begin
-        if (read_enable)
-            read_port <= register_data;
+       
     end
 
 endmodule
