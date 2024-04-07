@@ -24,7 +24,7 @@ always @(posedge clk) begin
         reg_data <= 16'h0000;
         $display("Register has been reset");
     end
-    // Read operation takes precedence over write operation
+    // Read operation takes precedence over write operation, if both are enabled simultaneously
     else if (read_enable) begin
         read_data <= reg_data;
         $display("You have successfully read the value %d", reg_data);
