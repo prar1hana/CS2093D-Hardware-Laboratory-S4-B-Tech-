@@ -5,49 +5,39 @@
 // d.  	Each read port should be able to access data from the register without any conflicts with write operations.
 // Please note that you should define the module with appropriate input and output ports and ensure that it meets all the specified requirements above.
 
-module register(input [15:0]write_data,input read_write,clk,rst,output reg[15:0]read_data);
-  reg [15:0]reg_data = 16'bx;
-  reg [15:0]old_data = 16'bx;
-  always@(posedge clk)
-    begin
-      if( rst )
-        read_data <= 16'bx;
-      else
-        begin
-          if( read_write == 1 )
-            begin
-              read_data = reg_data; 
-              reg_data <= write_data;
-              
-            end
-          else 
-            begin
-              read_data <= reg_data;  
-            end
-        end
-    end  
-endmodule
+module register_16bit (
+    input wire clk,
+    input wire reset,
+    input wire write_enable,
+    input wire [15:0] write_data,
+    input wire read_enable,
+    output reg [15:0] read_data
+);
 
-module testbench;
-  reg [15:0]write_data;
-  reg clk=1;
-  reg rst=0;
-  reg read_write;
-  wire [15:0]read_data;
-  register test(.write_data(write_data),.clk(clk),.rst(rst),.read_write(read_write),.read_data(read_data));
-  integer i;
-  always begin
-    clk = ~clk;
-    #5;
-  end
-  initial begin
-    for(i=0;i<=50;i=i+1)
-      begin
-        write_data = $random;
-        read_write = $random;
-        #5;
-      end
-    
-    $finish;
-  end
+// Internal register to hold the data, initialized to 16'h0000
+reg [15:0] reg_data = 16'h0000;
+
+// On positive edge of the clock
+always @(posedge clk) begin
+    // Reset the register if reset signal is asserted
+    if (reset) begin
+        reg_data <= 16'h0000;
+        $display("Register has been reset");
+    end
+    // Read operation takes precedence over write operation
+    else if (read_enable) begin
+        read_data <= reg_data;
+        $display("You have successfully read the value %d", reg_data);
+    end
+    // Write operation
+    else if (write_enable) begin
+        reg_data <= write_data;
+        $display("You have successfully written the value %d", write_data);
+    end
+    // Neither read nor write operation
+    else begin
+        $display("You didn't choose");
+    end
+end
+
 endmodule
