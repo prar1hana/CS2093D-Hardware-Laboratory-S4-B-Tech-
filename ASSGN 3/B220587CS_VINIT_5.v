@@ -1,18 +1,18 @@
-5.    Design and implement a highly efficient and optimized register file in Verilog for a complex multi-core                  processor's architecture with the following specifications:
+// 5.    Design and implement a highly efficient and optimized register file in Verilog for a complex multi-core                  processor's architecture with the following specifications:
 
-a.       It should contain 32 registers, each capable of storing 64 bits of data.
+// a.       It should contain 32 registers, each capable of storing 64 bits of data.
 
-b.      The register file should support simultaneous read and write operations across multiple ports.
+// b.      The register file should support simultaneous read and write operations across multiple ports.
 
-c.       It should have four read ports (read_port_1, read_port_2, read_port_3 and read_port_4) and two write ports (write_port_1 and write_port_2).
+// c.       It should have four read ports (read_port_1, read_port_2, read_port_3 and read_port_4) and two write ports (write_port_1 and write_port_2).
 
-d.      The register file should implement a priority-based access mechanism where read and write operations from different ports have different priority levels, and write operations should not interfere with read operations. The smaller the port number, the higher the priority.
+// d.      The register file should implement a priority-based access mechanism where read and write operations from different ports have different priority levels, and write operations should not interfere with read operations. The smaller the port number, the higher the priority.
 
-e.       Each read port should be able to access data from any register simultaneously, without any read conflicts.
+// e.       Each read port should be able to access data from any register simultaneously, without any read conflicts.
 
-f.        Write operations from different ports should be able to write data to different registers simultaneously, without any write conflicts.
+// f.        Write operations from different ports should be able to write data to different registers simultaneously, without any write conflicts.
 
-Please note that you should define the module with appropriate input and output ports and ensure that it correctly handles read and write operations.
+// Please note that you should define the module with appropriate input and output ports and ensure that it correctly handles read and write operations.
 module Q5 (
     input wire clk,
     input wire reset,
